@@ -10,7 +10,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useRef, useState } from "react";
 import { calculateMinMaxCrimeRank, getInterpolations } from "../utils/crime-data";
 import geojsonData from "../../public/data/glasgow_city_data_zones.json";
-import { useCrime } from "../hooks/crime-data";
+import { useCrime } from "../hooks/crime";
 
 const CrimeMap = () => {
   const { data } = useCrime();
