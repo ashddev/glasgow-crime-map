@@ -32,9 +32,6 @@ const CrimeMap = () => {
 
   const getCrimeRankForZone = (dataZone: string) => {
     const zoneData = data.find((d) => d.Data_Zone === dataZone);
-    console.log(data)
-    console.log(dataZone)
-    console.log(zoneData)
     return zoneData ? zoneData.SIMD2020_Crime_Domain_Rank : min;
   };
 
