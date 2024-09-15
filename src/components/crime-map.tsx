@@ -65,7 +65,7 @@ const CrimeMap = () => {
     })),
   };
 
-  const handleHover = (event: any) => {
+  const handlePopup = (event: any) => {
     const map = mapRef.current?.getMap();
     if (!map) return;
 
@@ -78,11 +78,53 @@ const CrimeMap = () => {
       setPopup({
         longitude: event.lngLat.lng,
         latitude: event.lngLat.lat,
-        properties: hoveredFeature.properties ? hoveredFeature.properties : {}
+        properties: hoveredFeature.properties,
       });
     } else {
       setPopup(null);
     }
+  };
+
+  const handleClick = (event: any) => {
+    const map = mapRef.current?.getMap();
+    if (!map) return;
+
+    const features = map.queryRenderedFeatures(event.point, {
+      layers: ["data-zones-layer"],
+    });
+
+    if (features && features.length) {
+      const clickedFeature = features[0];
+      if (clickedFeature.geometry.type === "Polygon") {
+        const coordinates = clickedFeature.geometry.coordinates[0];
+
+        let bounds: [[number, number], [number, number]] = [
+          [Infinity, Infinity],
+          [-Infinity, -Infinity],
+        ];
+
+        coordinates.forEach((coord) => {
+          bounds = [
+            [
+              Math.min(bounds[0][0], coord[0]),
+              Math.min(bounds[0][1], coord[1]),
+            ],
+            [
+              Math.max(bounds[1][0], coord[0]),
+              Math.max(bounds[1][1], coord[1]),
+            ],
+          ];
+        });
+
+        if (mapRef.current) {
+          mapRef.current.fitBounds(bounds, {
+            padding: 250,
+            duration: 1000,
+          });
+        }
+      }
+    }
+    handlePopup(event);
   };
 
   return (
@@ -100,8 +142,7 @@ const CrimeMap = () => {
           mapStyle={"mapbox://styles/mapbox/dark-v9"}
           renderWorldCopies={false}
           maxBounds={defaultMapBounds}
-          onClick={handleHover}
-          onMouseMove={handleHover}
+          onClick={handleClick}
         >
           <Source type="geojson" data={updatedGeoJson}>
             <Layer {...colourLayer} />
@@ -115,9 +156,12 @@ const CrimeMap = () => {
               latitude={popup.latitude}
             >
               <div>
-                <strong>Data Zone:</strong> {popup.properties.DataZone} <br />
-                <strong>Name:</strong> {popup.properties.Name.split(" - ")[0]} <br />
-                <strong>SIMD Crime Rank:</strong> {popup.properties.crimeRank} <br />
+                <strong>Data Zone:</strong> {popup.properties.DataZone}
+                <br />
+                <strong>Name:</strong> {popup.properties.Name.split(" - ")[0]}
+                <br />
+                <strong>SIMD Crime Rank:</strong> {popup.properties.crimeRank}
+                <br />
               </div>
             </Popup>
           )}
