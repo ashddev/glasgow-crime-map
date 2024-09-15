@@ -31,3 +31,7 @@ export const getInterpolations = (min: number, max: number) => {
 
   return interpolations;
 };
+
+export const getCrimeRankForZone = (dataZone: string, data:CrimeData[]) => {
+  return data.find((d) => d.Data_Zone === dataZone)?.SIMD2020_Crime_Domain_Rank
+};
