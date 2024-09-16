@@ -16,12 +16,12 @@ export const getInterpolations = (min: number, max: number) => {
   const step = total / 5;
 
   const colours = [
-    "rgba(241, 238, 246, 1)",  // Lightest color
-    "rgba(189, 201, 225, 1)",  // Slightly darker
-    "rgba(116, 169, 207, 1)",  // Medium light blue
-    "rgba(43, 140, 190, 1)",   // Medium blue
-    "rgba(4, 90, 141, 1)",     // Dark blue
-    "rgba(84, 39, 143, 1)"     // Darkest color
+    "rgba(255, 0, 0, 1)",    // Bright Red
+    "rgba(255, 69, 0, 1)",   // Red-Orange
+    "rgba(255, 140, 0, 1)",  // Orange
+    "rgba(135, 206, 250, 1)",// Light Sky Blue
+    "rgba(173, 216, 230, 1)",// Light Blue
+    "rgba(240, 248, 255, 1)" // Alice Blue (Lightest Blue)
   ];
 
   const interpolations = [];
