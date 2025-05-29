@@ -1,9 +1,12 @@
+import z from "zod";
+import { CrimeDataSchema } from "./hooks/useCrime";
+
 export const calculateMinMaxCrimeRank = (
-  crimeData: CrimeData[]
+  crimeData: z.infer<typeof CrimeDataSchema>
 ): { min: number; max: number } => {
   if (crimeData.length === 0) return { min: 0, max: 0 };
 
-  let ranks = crimeData.map((zone) => zone.SIMD2020_Crime_Domain_Rank);
+  const ranks = crimeData.map((zone) => zone.SIMD2020CrimeDomainRank);
 
   return {
     min: Math.min(...ranks),
@@ -32,6 +35,9 @@ export const getInterpolations = (min: number, max: number) => {
   return interpolations;
 };
 
-export const getCrimeRankForZone = (dataZone: string, data: CrimeData[]) => {
-  return data.find((d) => d.Data_Zone === dataZone)?.SIMD2020_Crime_Domain_Rank;
+export const getCrimeRankForZone = (
+  dataZone: string,
+  data: z.infer<typeof CrimeDataSchema>
+) => {
+  return data.find((d) => d.dataZone === dataZone)?.SIMD2020CrimeDomainRank;
 };

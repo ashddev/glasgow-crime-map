@@ -1,4 +1,4 @@
-import CrimeMap from "./components/crime-map";
+import CrimeMap from "./components/crimeMap";
 
 function App() {
   return (
