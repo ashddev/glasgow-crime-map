@@ -1,26 +1,25 @@
-import {useState, useEffect} from "react"
-import {supabase} from "../clients/supabase"
+import { useState, useEffect } from "react";
 
 export const useCrime = () => {
-    const [data, setData] = useState<CrimeData[]>([])
-    const [loading, setLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string | null>(null)
+  const [data, setData] = useState<CrimeData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        const fetchData = async () => {
-          const { data, error } = await supabase.from("simd_glasgow_2022").select().eq("Council_area", "Glasgow City");;
-    
-          if (error) {
-            console.error('Error fetching crime data:', error);
-            setError(error.message);
-          } else {
-            setData(data || []);
-          }
-          setLoading(false);
-        };
-    
-        fetchData();
-      }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("/api/crimes");
 
-      return { data, loading, error }
-}
+      if (response.status == 500) {
+        console.error("Error fetching crime data");
+      } else {
+        const data = await response.json();
+        console.log(data);
+        setData(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  return { data, loading };
+};
